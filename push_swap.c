@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 13:35:51 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/02/27 15:04:48 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/02/29 18:14:55 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,24 @@ int main(int argc, char **argv)
 	if (!argc)
 		return (1);	
 	fill_stack(&stack_a, argc, argv);
+
 	while (stack_a)
 	{
-		if (stack_a -> num)
+		if (stack_a->num)
 			{
-				printf("num: %i\n", stack_a -> num);
+				printf("Stack A[%i]: %i\n", i, stack_a -> num);
 			}
 		stack_a = stack_a -> next;
+		i++;
+	}
+	i = 1;
+	while (stack_b)
+	{
+		if (stack_b -> num)
+			{
+				printf("Stack B[%i]: %i\n", i, stack_b -> num);
+			}
+		stack_b = stack_b -> next;
+		i++;
 	}
 }

@@ -6,11 +6,11 @@
 #    By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 13:59:42 by vperez-f          #+#    #+#              #
-#    Updated: 2024/02/27 14:19:35 by vperez-f         ###   ########.fr        #
+#    Updated: 2024/02/29 14:53:46 by vperez-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFILES = push_swap.c stack_utils.c
+CFILES = push_swap.c stack_utils.c push_swap_utils.c
 
 OFILES = $(CFILES:%.c=%.o)
 
