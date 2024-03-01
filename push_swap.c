@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 13:35:51 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/02/29 18:14:55 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:36:38 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	fill_stack(t_stack **stack, int argc, char **argv)
 		argc--;
 	}
 }
-
 int main(int argc, char **argv)
 {
 	t_stack	*stack_a;
@@ -40,6 +39,7 @@ int main(int argc, char **argv)
 	if (!argc)
 		return (1);	
 	fill_stack(&stack_a, argc, argv);
+	first_sort(&stack_a, &stack_b, argc);
 
 	while (stack_a)
 	{
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 			{
 				printf("Stack B[%i]: %i\n", i, stack_b -> num);
 			}
-		stack_b = stack_b -> next;
+		stack_b = stack_b->next;
 		i++;
 	}
 }
