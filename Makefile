@@ -6,11 +6,11 @@
 #    By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 13:59:42 by vperez-f          #+#    #+#              #
-#    Updated: 2024/02/29 14:53:46 by vperez-f         ###   ########.fr        #
+#    Updated: 2024/03/01 16:02:19 by vperez-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFILES = push_swap.c stack_utils.c push_swap_utils.c
+CFILES = push_swap.c stack_utils.c push_swap_utils.c push_swap_utils2.c sorting_m.c
 
 OFILES = $(CFILES:%.c=%.o)
 
@@ -36,7 +36,11 @@ all: $(NAME)
 $(NAME): $(OFILES) 
 	make -C libft/
 	$(CC) $(CFLAGS) $(OFILES) $(PATH_LFT) -o $(NAME)
-	
+
+debug: $(OFILES) 
+	make -C libft/
+	$(CC) -g $(CFLAGS) $(OFILES) $(PATH_LFT) -o $(NAME)
+
 clean:
 	make clean -C libft 
 	$(RM) $(OBJ)

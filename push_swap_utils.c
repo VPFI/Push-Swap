@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 13:34:27 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/02/29 18:12:18 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/02/29 19:03:51 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,34 @@ void	push_b(t_stack **a, t_stack **b)
 }
 void	rotate_a(t_stack **a)
 {
-	t_stack	*new_last;
+	t_stack	*new_first;
 
-	if (*a)
+	if (*a)	
 	{
-		new_last = (ft_stackbefore_last(*a));
-		ft_stackadd_front(a, ft_stacklast(*a));
-		new_last->next = NULL;
+		if (!((*a)->next))
+			return ;
+		new_first = a[0]->next;
+		ft_stackadd_back(a, a[0]);
+		(*a)->next = NULL;
+		a[0] = new_first;
 	}
 }
 void	rotate_b(t_stack **b)
 {
-	t_stack	*new_last;
+	t_stack	*new_first;
 
-	if (*b)
+	if (*b)	
 	{
-		new_last = (ft_stackbefore_last(*b));
-		ft_stackadd_front(b, ft_stacklast(*b));
-		new_last->next = NULL;
+		if (!((*b)->next))
+			return ;
+		new_first = b[0]->next;
+		ft_stackadd_back(b, b[0]);
+		(*b)->next = NULL;
+		b[0] = new_first;
 	}
+}
+void	rotate_all(t_stack **a, t_stack **b)
+{
+	rotate_a(a);
+	rotate_b(b);		
 }

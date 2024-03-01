@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 14:56:50 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/02/29 17:28:32 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:41:06 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,20 @@ t_stack	*ft_stack_new(int num);
 t_stack	*ft_stacklast(t_stack *lst);
 t_stack	*ft_stackbefore_last(t_stack *lst);
 
-void	ft_stackadd_back(t_stack **lst, t_stack *new);
 void	push_a(t_stack **a, t_stack **b);
 void	push_b(t_stack **a, t_stack **b);
+void	swap_a(t_stack **a);
+void	swap_b(t_stack **b);
+void	swap_all(t_stack **a, t_stack **b);
 void	rotate_a(t_stack **a);
 void	rotate_b(t_stack **b);
+void	rotate_all(t_stack **a, t_stack **b);
+void    r_rotate_a(t_stack **a);
+void    r_rotate_b(t_stack **b);
+void    r_rotate_all(t_stack **a, t_stack **b);
 void	ft_stackadd_front(t_stack **lst, t_stack *new);
+void	ft_stackadd_back(t_stack **lst, t_stack *new);
+void    first_sort(t_stack **a, t_stack **b, int argc);
+void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot);
 
 #endif
