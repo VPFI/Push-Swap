@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 13:35:51 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/04 15:59:30 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/04 20:34:13 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,34 @@ void	fill_stack(t_stack **stack, int argc, char **argv)
 void	print_stacks(t_stack **stack_a, t_stack **stack_b)
 {
 	int	i;
-	t_stack *temp;
+	t_stack *temp_a;
+	t_stack *temp_b;
 
 	i = 1;
-	temp = *stack_a;
-	while (temp)
+	temp_a = *stack_a;
+	temp_b = *stack_b;
+	while (temp_a || temp_b)
 	{
-		if (temp->num)
-			{
-				printf("Stack A[%i]: %i\n", i, temp -> num);
-			}
-		temp = temp -> next;
-		i++;
-	}
-	i = 1;
-	temp = *stack_b;
-	while (temp)
-	{
-		if (temp -> num)
-			{
-				printf("Stack B[%i]: %i\n", i, temp -> num);
-			}
-		temp = temp->next;
+		if (temp_a)
+		{
+			if (temp_a->num)
+				{
+					printf("A[%02d]|| %02d --- ", i, temp_a -> num);
+				}
+			temp_a = temp_a -> next;
+		}
+		else
+			printf("A[%02d]|| \\\\ --- ", i);
+		if (temp_b)
+		{
+			if (temp_b -> num)
+				{
+					printf("%02d ||[%02d]B\n", temp_b -> num, i);
+				}
+			temp_b = temp_b -> next;
+		}
+		else
+			printf("\\\\ ||[%02d]B\n", i);
 		i++;
 	}
 }
@@ -66,4 +72,5 @@ int main(int argc, char **argv)
 		return (1);	
 	fill_stack(&stack_a, argc, argv);
 	first_sort(&stack_a, &stack_b, argc);
+	print_stacks(&stack_a, &stack_b);
 }
