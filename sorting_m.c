@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 19:09:46 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/04 20:54:09 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/05 20:07:11 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@ void	first_sort(t_stack **a, t_stack **b, int argc)
 {
 	int	pivot;
 	int	lo;
+	int	hi;
 
 	argc = 0;
 	pivot = a[0]->num;
 	lo = pivot;
+	hi = pivot;
 	rotate_a(a);
 	while (*a && a[0]->num != pivot)
 	{
@@ -34,28 +36,32 @@ void	first_sort(t_stack **a, t_stack **b, int argc)
 			}
 		}
 		else
+		{
+			if (a[0]->num > hi)
+				hi = a[0]->num;
 			rotate_a(a);
+		}
 	}
 	printf("Low: %i\n", lo);
-	while (*a)
+	printf("High: %i\n", hi);
+	/*while (*a)
 	{
 		push_b(a, b);
-	}
+	}*/
 	printf("-----------------------------------------\n");
 	printf("FIRST || Pivot A: %i\n", pivot);
 	printf("-----------------------------------------\n");
 	print_stacks(a, b);
-	sort(a, b, argc, pivot, 1, pivot);
+	sort(a, b, argc, pivot, 1, pivot, hi, lo);
 }
-void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_pivot)
+void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_pivot, int hi, int lo)
 {
 	int	pivot;
 	int	finished;
 
-	argc = 0;
 	finished = 0;
-	if (prev_pivot > 500)
-			return ;
+	if (prev_pivot > 1000 || argc > 10)
+		return ;
 	if (*a && side == 0)	
 	{
 		pivot = a[0]->num;
@@ -73,17 +79,24 @@ void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_p
 		}
 		while (*a && a[0]->num != pivot)
 			r_rotate_a(a);
-		while (*a && a[0]->num != prev_pivot)
+		if (*a && a[0]->num != prev_pivot)
 		{
 			push_b(a, b);
 		}
 		side = 1;
 		if (prev_pivot == pivot)
 		{
-			if (*b)
+			if ( pivot == hi)
 			{
-				push_a(a, b);
-				side = 1;
+				finished = 1;
+			}
+			else if (*a)
+			{
+				print_stacks(a, b);
+				printf("-----------------------------\n");
+				push_b(a, b);
+				push_b(a, b);
+				side = 0;
 			}
 			else
 				finished = 1;
@@ -107,17 +120,24 @@ void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_p
 		}
 		while (*b && b[0]->num != pivot)
 			r_rotate_b(b);
-		while (*b && b[0]->num != prev_pivot)
+		/*if (*b && b[0]->num != prev_pivot)
 		{
 			push_a(a, b);
-		}
+		}*/
 		side = 0;
 		if (prev_pivot == pivot)
 		{
-			if (*a)
+			if (pivot == hi)
 			{
-				push_b(a, b);
-				side = 0;
+				finished = 1;
+			}
+			else if (*b)
+			{
+				print_stacks(a, b);
+				printf("-----------------------------\n");
+				push_a(a, b);
+				push_a(a, b);
+				side = 1;
 			}
 			else
 				finished = 1;
@@ -126,18 +146,20 @@ void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_p
 	}
 	if (!finished)
 	{
-		printf("######## %i --- %i || %i || %i || %i\n", finished, side, pivot, prev_pivot, og_pivot);
-		sort(a, b, argc, pivot, side, og_pivot);
+		argc++;
+		printf(" %i ######## %i --- %i || %i || %i || %i || %i\n", argc, finished, side, pivot, prev_pivot, og_pivot, hi);
+		sort(a, b, argc, pivot, side, og_pivot, hi, lo);
 	}
 	else
 	{
+		argc++;
 		if (side == 0)
 		{
 			while (*b)
 				{
 					push_a(a, b);
 				}
-			sort2(a, b, argc, pivot, side, og_pivot);
+			sort(a, b, argc, pivot, side, og_pivot, hi, lo);
 		}
 		if (side == 1)
 		{
@@ -145,16 +167,15 @@ void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_p
 				{
 					push_b(a, b);
 				}
-			sort2(a, b, argc, pivot, side, og_pivot);
+			sort(a, b, argc, pivot, side, og_pivot, hi, lo);
 		}
 	}
 }
-void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_pivot)
+void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_pivot, int lo)
 {
 	int	pivot;
 	int	finished;
 
-	argc = 0;
 	finished = 0;
 	if (prev_pivot > 500)
 			return ;
@@ -162,7 +183,7 @@ void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_
 	{
 		pivot = a[0]->num;
 		rotate_a(a);
-		while (*a && a[0]->num != prev_pivot)
+		while (*a && (a[0]->num != prev_pivot && a[0]->num != pivot))
 		{
 			if (a[0]->num < pivot)
 				push_b(a, b);
@@ -188,7 +209,7 @@ void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_
 	{
 		pivot = b[0]->num;
 		rotate_b(b);
-		while (*b && b[0]->num != prev_pivot)
+		while (*b && (b[0]->num != prev_pivot && b[0]->num != pivot))
 		{
 			if (b[0]->num > pivot)
 				push_a(a, b);
@@ -203,7 +224,9 @@ void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_
 		}
 		side = 0;
 		if (prev_pivot == pivot)
+		{
 			finished = 1;
+		}
 		printf("-----------------------------------------\n");
 		printf("Prev_Pivot B2: %i --- ", prev_pivot);
 		printf("Pivot B2: %i\n", pivot);
@@ -212,11 +235,12 @@ void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_
 	}
 	if (!finished)
 	{
-		sort2(a, b, argc, pivot, side, og_pivot);
+		argc++;
+		sort2(a, b, argc, pivot, side, og_pivot, lo);
 	}
 	else
 	{
-		printf("%i\n", side);
+		argc++;
 		if (side == 0 || side == 1)
 		{
 			while (*b)
@@ -232,6 +256,7 @@ void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_
 				push_b(a, b);
 			}
 		}*/
+		printf("---------------------------------\n");
 	}
 }
 
