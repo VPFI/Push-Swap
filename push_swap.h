@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 14:56:50 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/05 18:00:57 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/07 19:13:58 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@
 typedef struct s_stack
 {
 	int             num;
+	int				index;
 	struct s_stack	*next;
 }					t_stack;
+
 
 t_stack	*ft_stack_new(int num);
 t_stack	*ft_stacklast(t_stack *lst);
@@ -39,6 +41,8 @@ void    r_rotate_all(t_stack **a, t_stack **b);
 void	ft_stackadd_front(t_stack **lst, t_stack *new);
 void	ft_stackadd_back(t_stack **lst, t_stack *new);
 void    first_sort(t_stack **a, t_stack **b, int argc);
+void	fill_stack(t_stack **stack, int argc, char **argv);
+void	fill_stack_ordered(t_stack **stack, int argc, char **argv);
 void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_pivot, int hi, int lo);
 void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_pivot, int lo);
 void	print_stacks(t_stack **stack_a, t_stack **stack_b);
