@@ -6,15 +6,14 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 13:35:51 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/07 17:53:58 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/07 19:31:40 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	fill_stack(t_stack **stack, int argc, char **argv)
+void	fill_stack_ordered(t_stack **stack, int argc, char **argv)
 {
-	//check if (s)? and NULL nodes
 	t_stack	*node;
 	t_stack	*temp;
 	int		i;
@@ -57,20 +56,35 @@ void	fill_stack(t_stack **stack, int argc, char **argv)
 			argc--;
 		}
 	}
+	i = 1;
+	temp = *stack;
+	while (temp)
+	{
+		(temp)->index = i;
+		temp = (temp)->next;
+		i++;
+	}
 }
-/*
-while ((argc - 1) > 0)
+void	fill_stack(t_stack **stack, int argc, char **argv)
 {
-	node = ft_stack_new(ft_atoi(argv[i]));
-	ft_stackadd_back(stack, node);
-	i++;
-	argc--;
-}*/
+	//check if (s)? and NULL nodes
+	t_stack	*node;
+	int		i;
+
+	i = 0;
+	while ((argc - 1) > 0)
+	{
+		node = ft_stack_new(ft_atoi(argv[i]));
+		ft_stackadd_back(stack, node);
+		i++;
+		argc--;
+	}
+}
 void	print_stacks(t_stack **stack_a, t_stack **stack_b)
 {
-	int	i;
 	t_stack *temp_a;
 	t_stack *temp_b;
+	int		i;
 
 	i = 1;
 	temp_a = *stack_a;
@@ -91,7 +105,7 @@ void	print_stacks(t_stack **stack_a, t_stack **stack_b)
 		{
 			if (temp_b -> num)
 				{
-					printf("%03d ||[%03d]B\n", temp_b -> num, i);
+					printf("%03d ||[%03d]B\n", temp_b -> num, temp_b->index);
 				}
 			temp_b = temp_b -> next;
 		}
@@ -104,15 +118,18 @@ int main(int argc, char **argv)
 {
 	t_stack	*stack_a;
 	t_stack	*stack_b;
+	t_stack * ordered;
 	//t_stack	*test;
 
 	stack_a = NULL;
 	stack_b = NULL;
+	ordered = NULL;
 	if (!argc)
 		return (1);	
 	fill_stack(&stack_a, argc, argv);
+	fill_stack_ordered(&ordered, argc, argv);
 	//first_sort(&stack_a, &stack_b, argc);
-	print_stacks(&stack_a, &stack_b);
+	print_stacks(&stack_a, &ordered);
 	//test = ft_stacklast(stack_a);
 	//printf("%i\n", test->num);
 }
