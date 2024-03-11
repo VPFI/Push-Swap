@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 19:09:46 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/05 20:07:11 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/11 20:13:30 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 // Do checks for invalid params before calling
 // Stack funtions check at least 2 elements
-void	first_sort(t_stack **a, t_stack **b, int argc)
+/*
+void	first_sort(t_stack **a, t_stack **b, t_stack **ordered, int argc)
 {
 	int	pivot;
 	int	lo;
 	int	hi;
 
-	argc = 0;
 	pivot = a[0]->num;
 	lo = pivot;
 	hi = pivot;
@@ -44,16 +44,17 @@ void	first_sort(t_stack **a, t_stack **b, int argc)
 	}
 	printf("Low: %i\n", lo);
 	printf("High: %i\n", hi);
-	/*while (*a)
+	while (*a)
 	{
 		push_b(a, b);
-	}*/
+	}
 	printf("-----------------------------------------\n");
 	printf("FIRST || Pivot A: %i\n", pivot);
 	printf("-----------------------------------------\n");
 	print_stacks(a, b);
 	sort(a, b, argc, pivot, 1, pivot, hi, lo);
-}
+}*/
+/*
 void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_pivot, int hi, int lo)
 {
 	int	pivot;
@@ -120,10 +121,10 @@ void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_p
 		}
 		while (*b && b[0]->num != pivot)
 			r_rotate_b(b);
-		/*if (*b && b[0]->num != prev_pivot)
+		if (*b && b[0]->num != prev_pivot)
 		{
 			push_a(a, b);
-		}*/
+		}
 		side = 0;
 		if (prev_pivot == pivot)
 		{
@@ -248,15 +249,114 @@ void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_
 				push_a(a, b);
 			}
 		}
-		/*
 		if (side == 1)
 		{
 			while (*a)
 			{
 				push_b(a, b);
 			}
-		}*/
+		}
 		printf("---------------------------------\n");
 	}
-}
+}*/
 
+void	good_sort_a(t_stack **a, t_stack **b, t_stack **ordered, int argc, int top, int bot, int pivot_index, int count)
+{
+	int		pivot;
+	t_stack *temp;
+
+	temp = *ordered;
+	printf("A bot: %i --- pv: %i\n", bot, pivot_index);
+	printf("A top: %i --- pv: %i\n", top, pivot_index);
+	if (*a && pivot_index != bot)
+	{
+		while (temp->index != pivot_index)
+		{
+			temp = temp->next;
+		}
+		pivot = temp->num;
+		while ((*a)->num != pivot)
+		{
+			if ((*a)->num < pivot)
+				push_b(a, b);
+			else
+				rotate_a(a);
+			count++;
+		}
+		if (*a)
+		{
+			rotate_a(a);
+		}
+		count++;
+		while (*a && (*a)->num != pivot_index)
+		{
+			//printf("num: %i -- bot: %i --- pv: %i\n", (*a)->num, bot, pivot);
+			if ((*a)->num < pivot)
+			{
+				//printf("Num: %i --- PV: %i\n", (*a)->num, pivot);
+				push_b(a, b);
+			}
+			else
+			{
+				rotate_a(a);
+			}
+			count++;
+		}
+		bot = pivot_index;
+		pivot_index = (argc + pivot_index) / 2;
+		printf("Count: %i\n", count);
+		good_sort_a(a, b, ordered, argc, top, bot, pivot_index, count);
+		//push_b(a, b);
+		//good_sort_b(a, b, ordered, argc, top, bot, pivot_index, count);
+	}
+}
+void	good_sort_b(t_stack **a, t_stack **b, t_stack **ordered, int argc, int top, int bot, int pivot_index, int count)
+{
+	int		pivot;
+	t_stack *temp;
+
+	temp = *ordered;
+	argc = 0;
+	printf("B bot: %i --- pv: %i\n", bot, pivot_index);
+	printf("B top: %i --- pv: %i\n", top, pivot_index);
+	if (*b && pivot_index != top)
+	{
+		while (temp->index != pivot_index)
+		{
+			temp = temp->next;
+		}
+		pivot = temp->num;
+		while ((*b)->num != pivot)
+		{
+			if ((*b)->num > pivot)
+				push_a(a, b);
+			else
+				rotate_b(b);
+			count++;
+		}
+		if (*b)
+		{
+			rotate_b(b);
+		}
+		count++;
+		//printf("22num: %i -- top: %i --- pv: %i\n", (*b)->num, bot, pivot);
+		while (*b && (*b)->num != pivot_index)
+		{
+			if ((*b)->num > pivot)
+			{
+				push_a(a, b);
+			}
+			else
+			{
+				rotate_b(b);
+			}
+			count++;
+		}
+		printf("Count B: %i\n", count);
+		top = pivot_index;
+		pivot_index = (pivot_index) / 2;
+		if (pivot_index == 0)
+			pivot_index = 1;
+		good_sort_b(a, b, ordered, argc, top, bot, pivot_index, count);
+	}
+}

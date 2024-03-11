@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 13:35:51 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/07 19:31:40 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/11 20:06:22 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	fill_stack(t_stack **stack, int argc, char **argv)
 	t_stack	*node;
 	int		i;
 
-	i = 0;
+	i = 1;
 	while ((argc - 1) > 0)
 	{
 		node = ft_stack_new(ft_atoi(argv[i]));
@@ -80,16 +80,18 @@ void	fill_stack(t_stack **stack, int argc, char **argv)
 		argc--;
 	}
 }
-void	print_stacks(t_stack **stack_a, t_stack **stack_b)
+void	print_stacks(t_stack **stack_a, t_stack **stack_b, t_stack **ordered)
 {
 	t_stack *temp_a;
 	t_stack *temp_b;
+	t_stack *temp_ord;
 	int		i;
 
 	i = 1;
 	temp_a = *stack_a;
 	temp_b = *stack_b;
-	while (temp_a || temp_b)
+	temp_ord = *ordered;
+	while (temp_a || temp_b || temp_ord)
 	{
 		if (temp_a)
 		{
@@ -105,12 +107,22 @@ void	print_stacks(t_stack **stack_a, t_stack **stack_b)
 		{
 			if (temp_b -> num)
 				{
-					printf("%03d ||[%03d]B\n", temp_b -> num, temp_b->index);
+					printf("%03d ||[%03d]B --------------- ", temp_b -> num, i);
 				}
 			temp_b = temp_b -> next;
 		}
 		else
-			printf("\\\\ ||[%03d]B\n", i);
+			printf("\\\\ ||[%03d]B --------------- ", i);
+		if (temp_ord)
+		{
+			if (temp_ord -> num)
+				{
+					printf("%03d ||[%03d]C\n", temp_ord -> num, temp_ord->index);
+				}
+			temp_ord = temp_ord -> next;
+		}
+		else
+			printf("\\\\ ||[%03d]C\n", i);
 		i++;
 	}
 }
@@ -118,7 +130,7 @@ int main(int argc, char **argv)
 {
 	t_stack	*stack_a;
 	t_stack	*stack_b;
-	t_stack * ordered;
+	t_stack *ordered;
 	//t_stack	*test;
 
 	stack_a = NULL;
@@ -128,8 +140,11 @@ int main(int argc, char **argv)
 		return (1);	
 	fill_stack(&stack_a, argc, argv);
 	fill_stack_ordered(&ordered, argc, argv);
+	good_sort_a(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, 0);
+	good_sort_b(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, 0);
+	push_a(&stack_a, &stack_b);
 	//first_sort(&stack_a, &stack_b, argc);
-	print_stacks(&stack_a, &ordered);
+	print_stacks(&stack_a, &stack_b, &ordered);
 	//test = ft_stacklast(stack_a);
 	//printf("%i\n", test->num);
 }
