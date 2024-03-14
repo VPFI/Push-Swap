@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 13:35:51 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/11 20:06:22 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/14 21:59:08 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,9 +140,11 @@ int main(int argc, char **argv)
 		return (1);	
 	fill_stack(&stack_a, argc, argv);
 	fill_stack_ordered(&ordered, argc, argv);
+	//print_stacks(&stack_a, &stack_b, &ordered);
 	good_sort_a(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, 0);
-	good_sort_b(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, 0);
-	push_a(&stack_a, &stack_b);
+	//good_sort_b(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, 0);
+	//push_a(&stack_a, &stack_b);
+	//while (stack_b)
 	//first_sort(&stack_a, &stack_b, argc);
 	print_stacks(&stack_a, &stack_b, &ordered);
 	//test = ft_stacklast(stack_a);

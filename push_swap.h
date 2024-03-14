@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 14:56:50 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/11 18:22:52 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/14 22:40:52 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,6 @@ void	good_sort_b(t_stack **stack_a, t_stack **stack_b, t_stack **ordered, int ar
 void	sort(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_pivot, int hi, int lo);
 void	sort2(t_stack **a, t_stack **b, int argc, int prev_pivot, int side, int og_pivot, int lo);
 void	print_stacks(t_stack **stack_a, t_stack **stack_b, t_stack **ordered);
+void	good_sort_alt(t_stack **a, t_stack **b, t_stack **ordered, int argc, int top, int bot, int pivot_index, int count);
 
 #endif
