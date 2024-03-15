@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 13:35:51 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/14 21:59:08 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/15 20:43:47 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	print_stacks(t_stack **stack_a, t_stack **stack_b, t_stack **ordered)
 			temp_a = temp_a -> next;
 		}
 		else
-			printf("A[%03d]|| \\\\ --- ", i);
+			printf("A[%03d]|| \\\\\\ --- ", i);
 		if (temp_b)
 		{
 			if (temp_b -> num)
@@ -112,7 +112,7 @@ void	print_stacks(t_stack **stack_a, t_stack **stack_b, t_stack **ordered)
 			temp_b = temp_b -> next;
 		}
 		else
-			printf("\\\\ ||[%03d]B --------------- ", i);
+			printf("\\\\\\ ||[%03d]B --------------- ", i);
 		if (temp_ord)
 		{
 			if (temp_ord -> num)
@@ -122,7 +122,7 @@ void	print_stacks(t_stack **stack_a, t_stack **stack_b, t_stack **ordered)
 			temp_ord = temp_ord -> next;
 		}
 		else
-			printf("\\\\ ||[%03d]C\n", i);
+			printf("\\\\\\ ||[%03d]C\n", i);
 		i++;
 	}
 }
