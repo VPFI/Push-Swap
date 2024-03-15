@@ -6,7 +6,7 @@
 /*   By: vperez-f <vperez-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 19:09:46 by vperez-f          #+#    #+#             */
-/*   Updated: 2024/03/14 22:42:07 by vperez-f         ###   ########.fr       */
+/*   Updated: 2024/03/15 21:39:31 by vperez-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,8 +267,7 @@ void	good_sort_a(t_stack **a, t_stack **b, t_stack **ordered, int argc, int top,
 
 	temp = *ordered;
 
-	//printf("A bot: %i --- pv: %i\n", bot, pivot_index);
-	//printf("A top: %i --- pv: %i\n", top, pivot_index);
+	printf("ENTRY A bot: %i --- A top: %i --- pv: %i\n", bot, top, pivot_index);
 	if (*a && pivot_index != bot)
 	{
 		//print_stacks(a, b, ordered);
@@ -305,28 +304,35 @@ void	good_sort_a(t_stack **a, t_stack **b, t_stack **ordered, int argc, int top,
 			}
 			count++;
 		}
-		printf("TOP: %i -- BOT: %i -- Pivot_Index: %i --- Pivot: %i\n", top, bot, pivot_index, pivot);
+		/*if ((*a)->num == pivot)
+		{
+			push_b(a, b);
+			count++;
+		}*/
 		bot = pivot_index;
-		pivot_index = (argc + pivot_index) / 2;
+		pivot_index = (top + pivot_index) / 2;
+		printf("END A bot: %i --- A top: %i --- pv: %i\n", bot, top, pivot_index);
+		//printf("NUMMMMMM: %i TOP: %i -- BOT: %i -- Pivot_Index: %i --- Pivot: %i\n", (*a)->num, top, bot, pivot_index, pivot);
 		printf("Count: %i\n", count);
 		good_sort_a(a, b, ordered, argc, top, bot, pivot_index, count);
-		printf("TO B: TOP: %i -- BOT: %i -- Pivot_Index: %i\n", top, bot, pivot_index);
-		push_b(a, b);
-		good_sort_b(a, b, ordered, argc, top, bot, pivot_index, count);
+		good_sort_b(a, b, ordered, argc, (pivot_index - 1), bot, bot, count);
 	}
 }
 void	good_sort_b(t_stack **a, t_stack **b, t_stack **ordered, int argc, int top, int bot, int pivot_index, int count)
 {
 	int		pivot;
+	int		kek;
 	t_stack *temp;
 
 	temp = *ordered;
 	argc = 0;
-	//printf("B bot: %i --- pv: %i\n", bot, pivot_index);
-	//printf("B top: %i --- pv: %i\n", top, pivot_index);
-	print_stacks(a, b, ordered);
-	if (*b && pivot_index != bot)
+	kek = top - bot;
+	printf("B top: %i --- bot: %i ---- kek: %i\n", top, bot, kek);
+	printf("DIV: %i\n",(top + bot) / 2);
+	//print_stacks(a, b, ordered);
+	if (*b && bot < top && (top - bot) > 1)
 	{
+		pivot_index = (top + bot) / 2;
 		while (temp->index != pivot_index)
 		{
 			temp = temp->next;
@@ -348,9 +354,9 @@ void	good_sort_b(t_stack **a, t_stack **b, t_stack **ordered, int argc, int top,
 		count++;
 		//printf("22num: %i -- top: %i --- pv: %i\n", (*b)->num, bot, pivot);
 		//print_stacks(a, b, ordered);
-		while (*b && (*b)->num != pivot)
+		while (*b && (*b)->num != bot)
 		{
-			if ((*b)->num > pivot)
+			if ((*b)->num > bot)
 			{
 				push_a(a, b);
 			}
@@ -360,6 +366,10 @@ void	good_sort_b(t_stack **a, t_stack **b, t_stack **ordered, int argc, int top,
 			}
 			count++;
 		}
+		while (*b && (*b)->num != pivot)
+		{
+			r_rotate_b(b);
+		}
 		printf("Count B: %i\n", count);
 		/*
 		if (pivot_index != 0)
@@ -367,9 +377,20 @@ void	good_sort_b(t_stack **a, t_stack **b, t_stack **ordered, int argc, int top,
 		//bot = pivot_index;
 		//pivot_index = (pivot_index) / 2;
 		//push_a(a, b);
-		
-		printf("TO A: TOP: %i -- BOT: %i -- Pivot_Index: %i\n", top, bot, pivot_index);
-		good_sort_alt(a, b, ordered, argc, top, bot, pivot_index, count);
+		print_stacks(a, b, ordered);
+		printf("TO BBBB: TOP: %i -- BOT: %i -- Pivot_Index: %i --- Pivot: %i\n", top, bot, pivot_index, pivot);
+		good_sort_b(a, b, ordered, argc, pivot_index - 1, bot, pivot_index, count);
+		printf("TO ALT: TOP: %i -- BOT: %i -- Pivot_Index: %i\n", bot, top, pivot_index);
+		print_stacks(a, b, ordered);
+		good_sort_alt(a, b, ordered, argc, bot, top, pivot_index, count);
+	}
+	else
+	{	while (*b && (*b)->num >= bot)
+		{
+			push_a(a, b);
+			count++;
+		}
+		printf("Less than 3\n");
 	}
 	//make another func to do the till zero
 }
@@ -380,11 +401,14 @@ void	good_sort_alt(t_stack **a, t_stack **b, t_stack **ordered, int argc, int to
 
 	temp = *ordered;
 
-	//printf("A bot: %i --- pv: %i\n", bot, pivot_index);
-	//printf("A top: %i --- pv: %i\n", top, pivot_index);
-	if (*a && pivot_index != bot)
+	printf("Alt bot: %i --- pv: %i\n", bot, pivot_index);
+	printf("Alt top: %i --- pv: %i\n", top, pivot_index);
+	print_stacks(a, b, ordered);
+	if (*a && top < bot && (bot - top) > 1)
 	{
 		//print_stacks(a, b, ordered);
+		pivot_index = (top + bot) / 2;
+		printf("pv: %i\n", pivot_index);
 		while (temp->index != pivot_index)
 		{
 			temp = temp->next;
@@ -418,13 +442,14 @@ void	good_sort_alt(t_stack **a, t_stack **b, t_stack **ordered, int argc, int to
 			}
 			count++;
 		}
-		printf("TOP: %i -- BOT: %i -- Pivot_Index: %i --- Pivot: %i\n", top, bot, pivot_index, pivot);
 		bot = pivot_index;
-		pivot_index = (argc + pivot_index) / 2;
+		pivot_index = (top + pivot_index) / 2;
 		printf("Count: %i\n", count);
+		printf("TOP_ALT: %i -- BOT: %i -- Pivot_Index: %i --- Pivot: %i\n", top, bot + 1, pivot_index, pivot);
 		good_sort_alt(a, b, ordered, argc, top, bot, pivot_index, count);
-		printf("TO B: TOP: %i -- BOT: %i -- Pivot_Index: %i\n", top, bot, pivot_index);
-		push_b(a, b);
-		good_sort_b(a, b, ordered, argc, top, bot, pivot_index, count);
+		//printf("TO B: TOP: %i -- BOT: %i -- Pivot_Index: %i\n", top, bot, pivot_index);
+		//push_b(a, b);
+		//good_sort_b(a, b, ordered, argc, top, bot, pivot_index, count);
 	}
+	printf("Less than 2\n");
 }
