@@ -131,22 +131,26 @@ int main(int argc, char **argv)
 	t_stack	*stack_a;
 	t_stack	*stack_b;
 	t_stack *ordered;
+	int		*count_final;
 	//t_stack	*test;
 
 	stack_a = NULL;
 	stack_b = NULL;
 	ordered = NULL;
+	count_final = malloc(sizeof(int));
+	*count_final = 0;
 	if (!argc)
 		return (1);	
 	fill_stack(&stack_a, argc, argv);
 	fill_stack_ordered(&ordered, argc, argv);
 	//print_stacks(&stack_a, &stack_b, &ordered);
-	good_sort_a(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, 0);
+	good_sort_a(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, count_final);
 	//good_sort_b(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, 0);
 	//push_a(&stack_a, &stack_b);
 	//while (stack_b)
 	//first_sort(&stack_a, &stack_b, argc);
-	print_stacks(&stack_a, &stack_b, &ordered);
+	//print_stacks(&stack_a, &stack_b, &ordered);
+	//printf("Total count(half): %i\n", *count_final);
 	//test = ft_stacklast(stack_a);
 	//printf("%i\n", test->num);
 }

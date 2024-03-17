@@ -22,6 +22,7 @@ void	push_a(t_stack **a, t_stack **b)
 		ft_stackadd_front(a, *b);
 		b[0] = temp;
 	}
+	printf("pa\n");	
 }
 void	push_b(t_stack **a, t_stack **b)
 {
@@ -33,6 +34,7 @@ void	push_b(t_stack **a, t_stack **b)
 		ft_stackadd_front(b, *a);
 		a[0] = temp;
 	}
+	printf("pb\n");	
 }
 void	rotate_a(t_stack **a)
 {
@@ -47,6 +49,7 @@ void	rotate_a(t_stack **a)
 		(*a)->next = NULL;
 		a[0] = new_first;
 	}
+	printf("ra\n");	
 }
 void	rotate_b(t_stack **b)
 {
@@ -61,9 +64,12 @@ void	rotate_b(t_stack **b)
 		(*b)->next = NULL;
 		b[0] = new_first;
 	}
+	printf("rb\n");
+	
 }
 void	rotate_all(t_stack **a, t_stack **b)
 {
 	rotate_a(a);
-	rotate_b(b);		
+	rotate_b(b);	
+	printf("rr\n");	
 }
