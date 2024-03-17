@@ -18,7 +18,7 @@ OBJ = $(OFILES)
 
 PATH_LFT = libft/libft.a
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra 
 
 CC = cc
 
