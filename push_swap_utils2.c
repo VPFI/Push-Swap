@@ -97,7 +97,7 @@ int	get_bot(t_stack **ordered, int bot)
 	temp = *ordered;
 	while (temp->next)
 	{
-		if (temp->index == bot)
+		if (temp->index == (bot))
 		{
 			bot_num = temp->num;
 			return (bot_num);
