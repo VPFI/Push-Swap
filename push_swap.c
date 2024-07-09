@@ -12,62 +12,50 @@
 
 #include "push_swap.h"
 
-void	fill_stack_ordered(t_stack **stack, int argc, char **argv)
+void	set_index(int num, int index, t_stack **stack_a)
 {
-	t_stack	*node;
 	t_stack	*temp;
-	int		i;
 
-	i = 1;
-	while ((argc - 1) > 0)
-	{
-		node = ft_stack_new(ft_atoi(argv[i]));
-		if (stack)		
-		{
-			if (*stack)
-			{
-				temp = *stack;
-				if (node->num < (temp)->num)
-				{
-					ft_stackadd_front(stack, node);
-				}
-				else
-				{
-					while (temp->next)
-					{
-						if (node->num > temp->num && (node->num < (temp->next)->num))
-						{					
-							node->next = temp->next;
-							temp->next = node;
-						}
-						temp = temp->next;
-					}
-					if (node->num > temp->num && temp->next == NULL)
-					{
-						ft_stackadd_back(stack, node);
-					}
-				}
-			}
-			else
-			{
-				*stack = node;
-			}
-			i++;
-			argc--;
-		}
-	}
-	i = 1;
-	temp = *stack;
+	temp = *stack_a;
 	while (temp)
 	{
-		(temp)->index = i;
-		temp = (temp)->next;
+		if (temp->num == num)
+		{
+			temp->index = index;
+			return ;
+		}
+		temp = temp->next;
+	}
+}
+
+void	create_index(int argc, char **argv, t_stack **stack_a)
+{
+	int	i;
+	int	j;
+	int	index;
+	int	num;
+	int	num_aux;
+
+	i = 1;
+	while (i <= (argc))
+	{
+		num = ft_atoi(argv[i]);
+		j = 1;
+		index = 0;
+		while (j <= (argc))
+		{
+			num_aux = ft_atoi(argv[j]);
+			if (num_aux < num)
+				index++;
+			j++;			
+		}
+		set_index(num, index, stack_a);
 		i++;
 	}
 }
+
 void	fill_stack(t_stack **stack, int argc, char **argv)
 {
-	//check if (s)? and NULL nodes
 	t_stack	*node;
 	int		i;
 
@@ -75,30 +63,28 @@ void	fill_stack(t_stack **stack, int argc, char **argv)
 	while ((argc - 1) > 0)
 	{
 		node = ft_stack_new(ft_atoi(argv[i]));
+		node->index = (i - 1);
 		ft_stackadd_back(stack, node);
 		i++;
 		argc--;
 	}
 }
-void	print_stacks(t_stack **stack_a, t_stack **stack_b, t_stack **ordered)
+
+void	print_stacks(t_stack **stack_a, t_stack **stack_b)
 {
 	t_stack *temp_a;
 	t_stack *temp_b;
-	t_stack *temp_ord;
 	int		i;
 
 	i = 1;
 	temp_a = *stack_a;
 	temp_b = *stack_b;
-	temp_ord = *ordered;
-	while ((temp_a || temp_b) && temp_ord)
+	while ((temp_a || temp_b))
 	{
 		if (temp_a)
 		{
 			if (temp_a->num)
-				{
-					printf("A[%03d]|| %03d --- ", i, temp_a -> num);
-				}
+				printf("A[%03d]|| %03d --- ", temp_a->index, temp_a -> num);
 			temp_a = temp_a -> next;
 		}
 		else
@@ -106,48 +92,253 @@ void	print_stacks(t_stack **stack_a, t_stack **stack_b, t_stack **ordered)
 		if (temp_b)
 		{
 			if (temp_b -> num)
-				{
-					printf("%03d ||[%03d]B --------------- ", temp_b -> num, i);
-				}
+				printf("%03d ||[%03d]B\n", temp_b -> num, temp_b->index);
 			temp_b = temp_b -> next;
 		}
 		else
-			printf("\\\\\\ ||[%03d]B --------------- ", i);
-		if (temp_ord)
-		{
-			if (temp_ord -> num)
-				{
-					printf("%03d ||[%03d]C\n", temp_ord -> num, temp_ord->index);
-				}
-			temp_ord = temp_ord -> next;
-		}
-		else
-			printf("\\\\\\ ||[%03d]C\n", i);
-		i++;
+			printf("\\\\\\ ||[%03d]B\n", i);
 	}
 }
+
+int	count_stack(t_stack *stack)
+{
+	int	i;
+
+	i = 0;
+	while (stack)
+	{
+		i++;
+		stack = stack->next;
+	}
+	return (i);
+}
+
+int		is_sorted_a(t_stack *stack)
+{
+	int	aux;
+
+	aux = stack->index;
+	while (stack)
+	{
+		if (stack->index >= aux)
+			aux = stack->index;
+		else
+			return (0);
+		stack = stack->next;
+	}
+	return (1);
+}
+
+void	radix_sort_b(int iterations, int i, t_stack **stack_a, t_stack **stack_b)
+{
+	int	count;
+
+	count = count_stack(*stack_b);
+	while (*stack_b && !is_sorted_a(*stack_a) && count && i <= iterations)
+	{
+		if ((((*stack_b)->index >> i) & 1) == 0)
+			rotate_b(stack_b);
+		else
+			push_a(stack_a, stack_b);
+		count--;
+	}
+	while (*stack_b && count)
+	{
+		push_a(stack_a, stack_b);
+		count--;
+	}
+}
+
+void	radix_sort_a(int amount, t_stack **stack_a, t_stack **stack_b)
+{
+	int	i;
+	int	iterations;
+	int	count;
+
+	iterations = 0;
+	i = amount;
+	while (i > 1)
+	{
+		i /= 2;
+		iterations++;		
+	}
+	i = 0;
+	while (i <= iterations)
+	{
+		count = count_stack(*stack_a);
+		while (*stack_a && !is_sorted_a(*stack_a) && count)
+		{
+			if ((((*stack_a)->index >> i) & 1) == 0)
+				push_b(stack_a, stack_b);
+			else
+				rotate_a(stack_a);
+			count--;
+		}
+		radix_sort_b(iterations, i + 1, stack_a, stack_b);
+		i++;
+	}
+	while (*stack_b)
+		push_a(stack_a, stack_b);
+}
+
+int	is_dup(char* num, char** argv)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (argv[i])
+	{
+		if (ft_atoi(num) == ft_atoi(argv[i]))
+			count += 1;
+		i++;
+	}
+	if (1 < count)
+		return (1);
+	return (0);
+}
+
+int	ft_atol(const char *str)
+{
+	int		i;
+	int		sign;
+	long	ans;
+
+	i = 0;
+	ans = 0;
+	sign = 1;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		ans = ans * 10 + (str[i] - '0');
+		i++;
+	}
+	return (ans * sign);
+}
+
+int	is_integer(char* num)
+{
+	int		length;
+	long	res;
+
+	length = ft_strlen(num);
+	if (length > 10)
+		return (0);
+	res = ft_atol(num);
+	if (res < INT_MIN || INT_MAX < res)
+		return (0);
+	return (1);
+
+}
+
+int	valid_num(char* num)
+{
+	int	i;
+
+	i = 0;
+	if (num[i] == '+' || num[i] == '-')
+		i++;
+	while (num[i])
+	{
+		if (!ft_isdigit(num[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	invalid_args(int argc, char** argv)
+{
+	int	i;
+
+	i = 1;
+	while (argv[i] && i < argc)
+	{
+		if (!valid_num(argv[i]) || !is_integer(argv[i]) || is_dup(argv[i], argv))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	error_exit()
+{
+	write(STDERR_FILENO, "Error\n", 6);
+	exit (1);
+}
+
+void	sort_three(t_stack **stack_a)
+{
+	int		first;
+	int		second;
+	int		third;
+	t_stack	*temp;
+
+	temp = *stack_a;
+	first = temp->num;
+	second = temp->next->num;
+	third = temp->next->next->num;
+	if (first < second && first < third)
+	{
+		swap_a(stack_a);
+		rotate_a(stack_a);
+	}
+	else if (first > second && first < third)
+		swap_a(stack_a);
+	else if (first < second && first > third)
+		r_rotate_a(stack_a);
+	else if (second < third)
+		rotate_a(stack_a);
+	else if (second > third)
+	{
+		swap_a(stack_a);
+		r_rotate_a(stack_a);
+	}	
+}
+
+
+void	sort_five(t_stack **stack_a, t_stack **stack_b)
+{
+
+}
+
+
+void	init_sort(int amount, t_stack **stack_a, t_stack **stack_b)
+{
+	if (is_sorted_a(*stack_a))
+		return ;
+	if (amount <= 2)
+		rotate_a(stack_a);
+	else if (amount <= 3)
+		sort_three(stack_a);
+	else if (amount <= 5)
+		sort_five(stack_a, stack_b);
+	else 
+		radix_sort_a(amount, stack_a, stack_b);		
+}
+
 int main(int argc, char **argv)
 {
 	t_stack	*stack_a;
 	t_stack	*stack_b;
-	t_stack *ordered;
-	//t_stack	*test;
+	int		amount;
 
 	stack_a = NULL;
 	stack_b = NULL;
-	ordered = NULL;
-	if (!argc)
-		return (1);	
+	amount = argc - 1;
+	if (argc < 2)
+		return (1);
+	if (invalid_args(argc, argv))
+		error_exit(1);
 	fill_stack(&stack_a, argc, argv);
-	fill_stack_ordered(&ordered, argc, argv);
-	//print_stacks(&stack_a, &stack_b, &ordered);
-	good_sort_a(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, 0);
-	//good_sort_b(&stack_a, &stack_b, &ordered, argc, argc - 1, 1, (argc - 1) / 2, 0);
-	//push_a(&stack_a, &stack_b);
-	//while (stack_b)
-	//first_sort(&stack_a, &stack_b, argc);
-	//print_stacks(&stack_a, &stack_b, &ordered);
-	//printf("Total count(half): %i\n", *count_final);
-	//test = ft_stacklast(stack_a);
-	//printf("%i\n", test->num);
+	create_index(amount, argv, &stack_a);
+	init_sort(amount, &stack_a, &stack_b);
+	//print_stacks(&stack_a, &stack_b);
+	return (0);
 }
