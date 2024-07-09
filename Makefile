@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-CFILES = push_swap.c stack_utils.c push_swap_utils.c push_swap_utils2.c sorting_m.c
+CFILES = push_swap.c stack_utils.c push_swap_utils.c push_swap_utils2.c
 
 OFILES = $(CFILES:%.c=%.o)
 
@@ -52,4 +52,4 @@ fclean:	clean
 re:	fclean all
 	make re -C libft
 
-.PHONY = all clean fclean re
+.PHONY: all clean fclean re
