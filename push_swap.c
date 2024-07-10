@@ -113,7 +113,7 @@ int	count_stack(t_stack *stack)
 	return (i);
 }
 
-int		is_sorted_a(t_stack *stack)
+int		is_sorted(t_stack *stack)
 {
 	int	aux;
 
@@ -134,7 +134,7 @@ void	radix_sort_b(int iterations, int i, t_stack **stack_a, t_stack **stack_b)
 	int	count;
 
 	count = count_stack(*stack_b);
-	while (*stack_b && !is_sorted_a(*stack_a) && count && i <= iterations)
+	while (*stack_b && !is_sorted(*stack_a) && count && i <= iterations)
 	{
 		if ((((*stack_b)->index >> i) & 1) == 0)
 			rotate_b(stack_b);
@@ -166,7 +166,7 @@ void	radix_sort_a(int amount, t_stack **stack_a, t_stack **stack_b)
 	while (i <= iterations)
 	{
 		count = count_stack(*stack_a);
-		while (*stack_a && !is_sorted_a(*stack_a) && count)
+		while (*stack_a && !is_sorted(*stack_a) && count)
 		{
 			if ((((*stack_a)->index >> i) & 1) == 0)
 				push_b(stack_a, stack_b);
@@ -186,7 +186,7 @@ int	is_dup(char* num, char** argv)
 	int	i;
 	int	count;
 
-	i = 0;
+	i = 1;
 	count = 0;
 	while (argv[i])
 	{
@@ -199,11 +199,11 @@ int	is_dup(char* num, char** argv)
 	return (0);
 }
 
-int	ft_atol(const char *str)
+long long	ft_atol(const char *str)
 {
 	int		i;
-	int		sign;
-	long	ans;
+	long long	sign;
+	long long	ans;
 
 	i = 0;
 	ans = 0;
@@ -219,20 +219,27 @@ int	ft_atol(const char *str)
 		ans = ans * 10 + (str[i] - '0');
 		i++;
 	}
-	return (ans * sign);
+	ans *= sign;
+	return (ans);
 }
 
 int	is_integer(char* num)
 {
-	int		length;
-	long	res;
+	int			length;
+	int			i;
+	long long	res;
 
-	length = ft_strlen(num);
-	if (length > 10)
+	i = 0;
+	if (num[i] == '-')
+		i++;
+	while (num[i] && num[i] == '0')
+		i++;
+	length = ft_strlen(&num[i]);
+	if (length > 11)
 		return (0);
 	res = ft_atol(num);
 	if (res < INT_MIN || INT_MAX < res)
-		return (0);
+			return (0);
 	return (1);
 
 }
@@ -247,7 +254,7 @@ int	valid_num(char* num)
 	while (num[i])
 	{
 		if (!ft_isdigit(num[i]))
-			return (0);
+				return (0);
 		i++;
 	}
 	return (1);
@@ -302,22 +309,61 @@ void	sort_three(t_stack **stack_a)
 	}	
 }
 
+void	sort_four(t_stack **stack_a, t_stack **stack_b)
+{
+	int		count;
+
+	count = count_stack(*stack_a);
+	while (3 < count)
+	{
+		if ((*stack_a)->index == 0)
+		{
+			push_b(stack_a, stack_b);
+			count--;
+		}
+		else
+			rotate_a(stack_a);
+	}
+	if (!is_sorted(*stack_a))
+		sort_three(stack_a);
+	push_a(stack_a, stack_b);
+}
 
 void	sort_five(t_stack **stack_a, t_stack **stack_b)
 {
+	int		count;
 
+	count = count_stack((*stack_a));
+	while (3 < count)
+	{
+		if ((*stack_a)->index == 0 || (*stack_a)->index == 1)
+		{
+			push_b(stack_a, stack_b);
+			count--;
+		}
+		else
+			rotate_a(stack_a);
+	}
+	if (!is_sorted((*stack_a)))
+		sort_three(stack_a);
+	if (is_sorted((*stack_b)))
+		rotate_b(stack_b);
+	push_a(stack_a, stack_b);
+	push_a(stack_a, stack_b);
 }
 
 
 void	init_sort(int amount, t_stack **stack_a, t_stack **stack_b)
 {
-	if (is_sorted_a(*stack_a))
+	if (is_sorted(*stack_a))
 		return ;
-	if (amount <= 2)
+	if (amount == 2)
 		rotate_a(stack_a);
-	else if (amount <= 3)
+	else if (amount == 3)
 		sort_three(stack_a);
-	else if (amount <= 5)
+	else if (amount == 4)
+		sort_four(stack_a, stack_b);
+	else if (amount == 5)
 		sort_five(stack_a, stack_b);
 	else 
 		radix_sort_a(amount, stack_a, stack_b);		
